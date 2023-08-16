@@ -11,14 +11,14 @@ def create_user(email: str, name: str, surname: str, password: str):
     user.save()
 
 def is_exist_user_by_email(email: str) -> bool:
-    user_by_email = User.objects.filter(email=email)
-    if user_by_email.get(): return True
+    user_by_email = User.objects.filter(email=email).count()
+    if user_by_email != 0: return True
     else: return False
 
 def is_correct_password_by_email(email: str, password: str) -> bool:
     if is_exist_user_by_email(email):
-        user_by_email_password = User.objects.filter(email=email).filter(password=password)
-        if user_by_email_password.get(): return True
+        user_by_email_password = User.objects.filter(email=email).filter(password=password).count()
+        if user_by_email_password != 0: return True
         else: return False
     else:
         return False

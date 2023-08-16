@@ -7,7 +7,7 @@ from .models import *
 def register(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.raw_post_data)
+            data = json.loads(request.body)
             email = data.get('email')
             name = data.get('name')
             surname = data.get('surname')
@@ -17,27 +17,27 @@ def register(request):
                 create_user(email, name, surname, password)
                 return HttpResponse("OK")
             else:
-                return HttpResponseBadRequest()
+                return HttpResponseBadRequest("User already exists")
         except Exception as e:
             print(e)
-            return HttpResponseBadRequest()
+            return HttpResponseBadRequest("Bad data format")
     else:
-        return HttpResponseNotAllowed()
+        return HttpResponseNotAllowed(permitted_methods=['POST'])
 
 def authorization(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.raw_post_data)
+            data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
 
             if is_correct_password_by_email(email, password):
                 return HttpResponse("OK")
             else:
-                return HttpResponseBadRequest()
+                return HttpResponseBadRequest("Incorrect email or password")
 
         except Exception as e:
             print(e)
-            return HttpResponseBadRequest()
+            return HttpResponseBadRequest("Bad data format")
     else:
-        return HttpResponseNotAllowed()
+        return HttpResponseNotAllowed(permitted_methods=['POST'])
