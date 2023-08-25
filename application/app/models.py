@@ -16,8 +16,12 @@ def is_exist_user_by_email(email: str) -> bool:
     else: return False
 
 def is_correct_password_by_email(email: str, password: str) -> bool:
+    print("is_correct_password_by_email")
+    print(email + " " + password)
     if is_exist_user_by_email(email):
+        print("User by email exists")
         user_by_email_password = User.objects.filter(email=email).filter(password=password).count()
+        print("Found number of user: " + str(user_by_email_password))
         if user_by_email_password != 0: return True
         else: return False
     else:
